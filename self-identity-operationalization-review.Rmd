@@ -509,7 +509,7 @@ referenceDf <- queryHits[[1]]$records[grepl('incl', queryHits[[1]]$records$revie
 referenceDf <-
   referenceDf %>%
   dplyr::mutate(reference_html = 
-                  glue("<div style='padding-left: 20px; text-indent: -20px ;'>{author} ({year}). {title}. <i>{title.secundary} {volume}</i>, p. {page.start}-{page.end}. doi:{doi}</div>"));
+                  glue("<div style='padding-left: 20px; text-indent: -20px ;'>{author} ({year}). {title}. <i>{journal} {volume}</i>, p. {pages}. doi:{doi}</div>"));
 
 cat(referenceDf$reference_html);
 
