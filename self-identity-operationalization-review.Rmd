@@ -42,6 +42,7 @@ require('userfriendlyscience', quietly = TRUE);
 require('metabefor', quietly = TRUE);
 safeRequire('plyr');
 safeRequire('dplyr');
+safeRequire('glue');
 
 ```
 
@@ -59,7 +60,10 @@ queryHits <- lapply(queryHitsFiles,
                       return(importBibtex(file.path(queryHitsPath,
                                                     filename)));
                     });
+# queryHitsObject <- importBibtex(file.path(queryHitsPath,
+#                                           queryHitsFiles));
 names(queryHits) <- queryHitsFiles;
+names(queryHits[[1]]$records) <- trimws(names(queryHits[[1]]$records));
 ```
 
 ## Hits from each source
@@ -96,11 +100,11 @@ knitr::kable(userfriendlyscience::freq(tolower(queryHits[[1]]$records$review_ite
 
 resultsTable <- ldply(queryHits,
                       function(queryHitsObject) {
-                        res <- data.frame(bibtexkey = queryHitsObject$records$bibtexkey,
-                                          author = queryHitsObject$records$author,
-                                          title = queryHitsObject$records$title,
-                                          year = queryHitsObject$records$year,
-                                          review_items = queryHitsObject$records$review_items)
+                        res <- data.frame(bibtexkey = trimws(queryHitsObject$records$bibtexkey),
+                                          author = trimws(queryHitsObject$records$author),
+                                          title = trimws(queryHitsObject$records$title),
+                                          year = trimws(queryHitsObject$records$year),
+                                          review_items = trimws(queryHitsObject$records$review_items))
                         res$operationalisations <-
                           sapply(strsplit(queryHitsObject$records$operationalisations, "\\|\\|"),
                                  paste,
@@ -120,12 +124,13 @@ write.csv(resultsTable,
 
 longResults <- ldply(queryHits,
                      function(queryHitsObject) {
-                       res <- data.frame(bibtexkey = queryHitsObject$records$bibtexkey,
-                                         author = queryHitsObject$records$author,
-                                         title = queryHitsObject$records$title,
-                                         year = queryHitsObject$records$year,
-                                         operationalisations = queryHitsObject$records$operationalisations,
-                                         review_items = queryHitsObject$records$review_items)
+                       res <- data.frame(bibtexkey = trimws(queryHitsObject$records$bibtexkey),
+                                         author = trimws(queryHitsObject$records$author),
+                                         title = trimws(queryHitsObject$records$title),
+                                         year = trimws(queryHitsObject$records$year),
+                                         operationalisations = trimws(queryHitsObject$records$operationalisations),
+                                         review_items = trimws(queryHitsObject$records$review_items),
+                                         stringsAsFactors = FALSE);
                         return(res[!is.na(res$review_items) & res$review_items=='incl', ]);
                      });
 
@@ -492,5 +497,20 @@ knitr::kable(allOperationalisationsCategorised);
 
 write.csv(allOperationalisationsCategorised,
           file = file.path(workingPath, "operationalisations-categorized.csv"));
+
+```
+
+# References
+
+```{r, results='asis'}
+
+### Selected included articles
+referenceDf <- queryHits[[1]]$records[grepl('incl', queryHits[[1]]$records$review_items), ];
+referenceDf <-
+  referenceDf %>%
+  dplyr::mutate(reference_html = 
+                  glue("<div style='padding-left: 20px; text-indent: -20px ;'>{author} ({year}). {title}. <i>{title.secundary} {volume}</i>, p. {page.start}-{page.end}. doi:{doi}</div>"));
+
+cat(referenceDf$reference_html);
 
 ```

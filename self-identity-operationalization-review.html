@@ -246,7 +246,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">The Operationalisation of Self-Identity in Reasoned Action Models: A systematic review of self-identity operationalisations in 30 years of research</h1>
 <h4 class="author"><em>Marwin Snippe, Gjalt-Jorn Ygram Peters &amp; Gerjo Kok</em></h4>
-<h4 class="date"><em>14:55:50 on 2018-12-07 CET (GMT+0100)</em></h4>
+<h4 class="date"><em>15:21:05 on 2018-12-07 CET (GMT+0100)</em></h4>
 
 </div>
 
@@ -271,7 +271,8 @@ queryHitsFiles &lt;- c(&quot;self-identity-operationalizations.bib&quot;);
 require('userfriendlyscience', quietly = TRUE);
 require('metabefor', quietly = TRUE);
 safeRequire('plyr');
-safeRequire('dplyr');</code></pre>
+safeRequire('dplyr');
+safeRequire('glue');</code></pre>
 <div id="queries-and-screening" class="section level1">
 <h1>Queries and screening</h1>
 <div id="importing-references" class="section level2">
@@ -287,7 +288,10 @@ queryHits &lt;- lapply(queryHitsFiles,
                     });</code></pre>
 <pre><code>## 
 ## Converting references to dataframe...</code></pre>
-<pre class="r"><code>names(queryHits) &lt;- queryHitsFiles;</code></pre>
+<pre class="r"><code># queryHitsObject &lt;- importBibtex(file.path(queryHitsPath,
+#                                           queryHitsFiles));
+names(queryHits) &lt;- queryHitsFiles;
+names(queryHits[[1]]$records) &lt;- trimws(names(queryHits[[1]]$records));</code></pre>
 </div>
 <div id="hits-from-each-source" class="section level2">
 <h2>Hits from each source</h2>
@@ -548,11 +552,11 @@ queryHits &lt;- lapply(queryHitsFiles,
 <h1>Extraction</h1>
 <pre class="r"><code>resultsTable &lt;- ldply(queryHits,
                       function(queryHitsObject) {
-                        res &lt;- data.frame(bibtexkey = queryHitsObject$records$bibtexkey,
-                                          author = queryHitsObject$records$author,
-                                          title = queryHitsObject$records$title,
-                                          year = queryHitsObject$records$year,
-                                          review_items = queryHitsObject$records$review_items)
+                        res &lt;- data.frame(bibtexkey = trimws(queryHitsObject$records$bibtexkey),
+                                          author = trimws(queryHitsObject$records$author),
+                                          title = trimws(queryHitsObject$records$title),
+                                          year = trimws(queryHitsObject$records$year),
+                                          review_items = trimws(queryHitsObject$records$review_items))
                         res$operationalisations &lt;-
                           sapply(strsplit(queryHitsObject$records$operationalisations, &quot;\\|\\|&quot;),
                                  paste,
@@ -572,12 +576,13 @@ write.csv(resultsTable,
 
 longResults &lt;- ldply(queryHits,
                      function(queryHitsObject) {
-                       res &lt;- data.frame(bibtexkey = queryHitsObject$records$bibtexkey,
-                                         author = queryHitsObject$records$author,
-                                         title = queryHitsObject$records$title,
-                                         year = queryHitsObject$records$year,
-                                         operationalisations = queryHitsObject$records$operationalisations,
-                                         review_items = queryHitsObject$records$review_items)
+                       res &lt;- data.frame(bibtexkey = trimws(queryHitsObject$records$bibtexkey),
+                                         author = trimws(queryHitsObject$records$author),
+                                         title = trimws(queryHitsObject$records$title),
+                                         year = trimws(queryHitsObject$records$year),
+                                         operationalisations = trimws(queryHitsObject$records$operationalisations),
+                                         review_items = trimws(queryHitsObject$records$review_items),
+                                         stringsAsFactors = FALSE);
                         return(res[!is.na(res$review_items) &amp; res$review_items=='incl', ]);
                      });
 
@@ -3760,6 +3765,383 @@ knitr::kable(allOperationalisationsCategorised);</code></pre>
 </table>
 <pre class="r"><code>write.csv(allOperationalisationsCategorised,
           file = file.path(workingPath, &quot;operationalisations-categorized.csv&quot;));</code></pre>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<pre class="r"><code>### Selected included articles
+referenceDf &lt;- queryHits[[1]]$records[grepl('incl', queryHits[[1]]$records$review_items), ];
+referenceDf &lt;-
+  referenceDf %&gt;%
+  dplyr::mutate(reference_html = 
+                  glue(&quot;&lt;div style='padding-left: 20px; text-indent: -20px ;'&gt;{author} ({year}). {title}. &lt;i&gt;{title.secundary} {volume}&lt;/i&gt;, p. {page.start}-{page.end}. doi:{doi}&lt;/div&gt;&quot;));
+
+cat(referenceDf$reference_html);</code></pre>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Haydon, Helen M. and Obst, Patricia L. and Lewis, Ioni ( 2018/01//). Examining women’s alcohol consumption: The theory of planned behavior and self-identity.. <i>NA 53</i>, p. page.128- page.136. doi: 10.1080/10826084.2017.1327972
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Carfora, V. and Caso, D. and Sparks, P. and Conner, M. ( 2017/11//). Moderating effects of pro-environmental self-identity on pro-environmental intentions and behaviour: A multi-behaviour study.. <i>NA 53</i>, p. page.92- page.99. doi: 10.1016/j.jenvp.2017.07.001
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Ho, Shirley S. and Lwin, May O. and Lee, Edmund W. J. ( 2017/10//). Till logout do us part? Comparison of factors predicting excessive social network sites use and addiction between Singaporean adolescents and adults.. <i>NA 75</i>, p. page.632- page.642. doi: 10.1016/j.chb.2017.06.002
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+O’Connor, Erin L. and Sims, Lauren and White, Katherine M. ( 2017/09//). Ethical food choices: Examining people’s Fair Trade purchasing decisions.. <i>NA 60</i>, p. page.105- page.112. doi: 10.1016/j.foodqual.2017.04.001
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Malek, Lenka and Umberger, Wendy J. and Makrides, Maria and ShaoJia, Zhou ( 2017/09/01/). Predicting healthy eating intention and adherence to dietary recommendations during pregnancy in Australia using the Theory of Planned Behaviour.. <i>NA 116</i>, p. page.431- page.441. doi: 10.1016/j.appet.2017.05.028
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Carfora, V. and Caso, D. and Conner, M. ( 2016/11/01/). The role of self-identity in predicting fruit and vegetable intake.. <i>NA 106</i>, p. page.23- page.29. doi: 10.1016/j.appet.2015.12.020
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Jiang, Caihong and Zhao, Wenguo and Sun, Xianghong and Zhang, Kan and Zheng, Rui and Qu, Weina ( 2016/11//). The effects of the self and social identity on the intention to microblog: An extension of the theory of planned behavior.. <i>NA 64</i>, p. page.754- page.759. doi: 10.1016/j.chb.2016.07.046
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Wan, Xin and Schonfeld, Paul M. and Li, Qiming ( 2016/10//). What factors determine metro passengers’ risky riding behavior? An approach based on an extended theory of planned behavior.. <i>NA 42</i>, p. page.125- page.139. doi: 10.1016/j.trf.2016.07.005
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Chatzidakis, Andreas and Kastanakis, Minas and Stathopoulou, Anastasia ( 2016/01//). Socio-cognitive determinants of consumers’ support for the fair trade movement.. <i>NA 133</i>, p. page.95- page.109. doi: 10.1007/s10551-014-2347-9
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Obschonka, Martin and Silbereisen, Rainer K. and Cantner, Uwe and Goethner, Maximilian ( 2015/12//). Entrepreneurial self-identity: Predictors and effects within the theory of planned behavior framework.. <i>NA 30</i>, p. page.773- page.794. doi: 10.1007/s10869-014-9385-2
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Bagot, Kathleen L. and Masser, Barbara M. and White, Katherine M. ( 2015/08//). Using an extended theory of planned behavior to predict a change in the type of blood product donated.. <i>NA 49</i>, p. page.510- page.521. doi: 10.1007/s12160-014-9677-9
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Peluso, Alessandro M. ( 2015/07//). Psychological drivers in the adoption of morally controversial innovations: The moderating role of ethical self-identity.. <i>NA 24</i>, p. page.252- page.263. doi: 10.1111/beer.12080
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Cheng, Pi-Yueh and Chu, Mei-Chin ( 2014/09//). Behavioral factors affecting students’ intentions to enroll in business ethics courses: A comparison of the theory of planned behavior and social cognitive theory using self-identity as a moderator.. <i>NA 124</i>, p. page.35- page.46. doi: 10.1007/s10551-013-1858-0
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Booth, Amy R. and Norman, Paul and Goyder, Elizabeth and Harris, Peter R. and Campbell, Michael J. ( 2014/09//). Pilot study of a brief intervention based on the theory of planned behaviour and self-identity to increase chlamydia testing among young people living in deprived areas.. <i>NA 19</i>, p. page.636- page.651. doi: 10.1111/bjhp.12065
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Marta, Elena and Manzi, Claudia and Pozzi, Maura and Vignoles, Vivian Laurance ( 2014/05//). Identity and the theory of planned behavior: Predicting maintenance of volunteering after three years.. <i>NA 154</i>, p. page.198- page.207. doi: 10.1080/00224545.2014.881769
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Oh, Jong-Chul and Yoon, Sung-Joon ( 2014/05//). Theory-based approach to factors affecting ethical consumption.. <i>NA 38</i>, p. page.278- page.288. doi: 10.1111/ijcs.12092
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Booth, Amy R. and Norman, Paul and Harris, Peter R. and Goyder, Elizabeth ( 2014/02//). Using the theory of planned behaviour and self-identity to explain chlamydia testing intentions in young people living in deprived areas.. <i>NA 19</i>, p. page.101- page.112. doi: 10.1111/bjhp.12036
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Leyland, Sandra D. and van Wersch, Anna and Woodhouse, David ( 2014/01//). Testing an extended theory of planned behaviour to predict intention to participate in health-related exercise during long-distance flight travel.. <i>NA 12</i>, p. page.34- page.48. doi: 10.1080/1612197X.2012.756255
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Hyde, Melissa K. and Knowles, Simon R. and White, Katherine M. ( 2013/12//). Donating blood and organs: Using an extended theory of planned behavior perspective to identify similarities and differences in individual motivations to donate.. <i>NA 28</i>, p. page.1092- page.1104. doi: 10.1093/her/cyt078
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Hyde, Melissa K. and White, Katherine M. ( 2013/12//). Testing an extended theory of planned behavior to predict young people’s intentions to join a bone marrow donor registry.. <i>NA 43</i>, p. page.2462- page.2467. doi: 10.1111/jasp.12195
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Dowd, Kylie and Burke, Karena J. ( 2013/10/01/). The influence of ethical values and food choice motivations on intentions to purchase sustainably sourced foods.. <i>NA 69</i>, p. page.137- page.144. doi: 10.1016/j.appet.2013.05.024
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Barata, Raquel and Castro, Paula ( 2013/09//). ‘I feel recycling matters… sometimes’: The negative influence of ambivalence on waste separation among teenagers.. <i>NA 50</i>, p. page.313- page.320. doi: 10.1016/j.soscij.2013.05.007
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Elliott, Mark A. and Thomson, James A. and Robertson, Kirsty and Stephenson, Carry and Wicks, John ( 2013/01//). Evidence that changes in social cognitions predict changes in self-reported driver behavior: Causal analyses of two-wave panel data.. <i>NA 50</i>, p. page.905- page.916. doi: 10.1016/j.aap.2012.07.017
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Hoang, Thu Gia ( 2013///). Reconceptualizing organizational commitment using the theory of reasoned action: Testing antecedents of multiple organizational behaviors.. <i>NA 73</i>, p. NA-NA. doi: 10.15760/etd.109
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Tunnicliff, Deborah J. and Watson, Barry C. and White, Katherine M. and Hyde, Melissa K. and Schonfeld, Cynthia C. and Wishart, Darren E. ( 2012/11//). Understanding the factors influencing safe and unsafe motorcycle rider intentions.. <i>NA 49</i>, p. page.133- page.141. doi: 10.1016/j.aap.2011.03.012
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Chorlton, Kathryn and Conner, Mark and Jamson, Samantha ( 2012/11//). Identifying the psychological determinants of risky riding: An application of an extended Theory of Planned Behaviour.. <i>NA 49</i>, p. page.142- page.153. doi: 10.1016/j.aap.2011.07.003
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+de Bruijn, Gert-Jan and Verkooijen, Kirsten and de Vries, Nanne K. and van den Putte, Bas ( 2012/11//). Antecedents of self identity and consequences for action control: An application of the theory of planned behaviour in the exercise domain.. <i>NA 13</i>, p. page.771- page.778. doi: 10.1016/j.psychsport.2012.05.008
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+White, Katherine M. and Hyde, Melissa K. ( 2012/11//). The role of self-perceptions in the prediction of household recycling behavior in Australia.. <i>NA 44</i>, p. page.785- page.799. doi: 10.1177/0013916511408069
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Gardner, Benjamin and de Bruijn, Gert-Jan and Lally, Phillippa ( 2012/09//). Habit, identity, and repetitive action: A prospective study of binge-drinking in UK students.. <i>NA 17</i>, p. page.565- page.581. doi: 10.1111/j.2044-8287.2011.02056.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+de Bruijn, Gert-Jan and van den Putte, Bas ( 2012/07//). Exercise promotion: An integration of exercise self-identity, beliefs, intention, and behaviour.. <i>NA 12</i>, p. page.354- page.366. doi: 10.1080/17461391.2011.568631
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Dean, Moira and Raats, Monique M. and Shepherd, Richard ( 2012/03//). The role of self-identity, past behavior, and their interaction in predicting intention to purchase fresh and processed organic food.. <i>NA 42</i>, p. page.669- page.688. doi: 10.1111/j.1559-1816.2011.00796.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Lu, Jia ( 2012///). Predicting blood donations among college students as a strategy to design voluntary blood donation campaigns in China.. <i>NA 72</i>, p. page.3029- page.3029. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Hassandra, Mary and Vlachopoulos, Symeon P. and Kosmidou, Evdoxia and Hatzigeorgiadis, Antonis and Goudas, Marios and Theodorakis, Yiannis ( 2011/09//). Predicting students’ intention to smoke by theory of planned behaviour variables and parental influences across school grade levels.. <i>NA 26</i>, p. page.1241- page.1258. doi: 10.1080/08870446.2011.605137
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Lokhorst, Anne Marike and Staats, Henk and van Dijk, Jerry and van Dijk, Eric and de Snoo, Geert ( 2011/07//). What’s in it for me? Motivational differences between farmers’ subsidised and non-subsidised conservation practices.. <i>NA 60</i>, p. page.337- page.353. doi: 10.1111/j.1464-0597.2011.00438.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+White, Katherine M. and O’Connor, Erin L. and Hamilton, Kyra ( 2011/06//). In-group and role identity influences on the initiation and maintenance of students’ voluntary attendance at peer study sessions for statistics.. <i>NA 81</i>, p. page.325- page.343. doi: 10.1348/000709910X513258
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Langteau, Rita Ann ( 2011///). Neurologists’ discussion intentions regarding a medical innovation: An examination of psychological determinants and personal normative influences.. <i>NA 72</i>, p. page.430- page.430. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Elliott, Mark A. and Thomson, James A. ( 2010/11//). The social cognitive determinants of offending drivers’ speeding behaviour.. <i>NA 42</i>, p. page.1595- page.1605. doi: 10.1016/j.aap.2010.03.018
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Høie, Magnhild and Moan, Inger Synnøve and Rise, Jostein ( 2010/10//). An extended version of the theory of planned behavour: Prediction of intentions to quit smoking using past behaviour as moderator.. <i>NA 18</i>, p. page.572- page.585. doi: 10.3109/16066350903474386
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Whitmarsh, Lorraine and O’Neill, Saffron ( 2010/09//). Green identity, green living? The role of pro-environmental self-identity in determining consistency across diverse pro-environmental behaviours.. <i>NA 30</i>, p. page.305- page.314. doi: 10.1016/j.jenvp.2010.01.003
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Burger, Christoph and Riemer, Valentin and Grafeneder, Jürgen and Woisetschläger, Bianca and Vidovic, Dragana and Hergovich, Andreas ( 2010/08//). Reaching the mobile respondent: Determinants of high-level mobile phone use among a high-coverage group.. <i>NA 28</i>, p. page.336- page.349. doi: 10.1177/0894439309353099
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Wilkinson, Wayne W. and Sagarin, Brad J. ( 2010/08//). Psychological antecedents of heterosexuals’ pro-gay activism behavior.. <i>NA 57</i>, p. page.878- page.894. doi: 10.1080/00918369.2010.494908
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Nigbur, Dennis and Lyons, Evanthia and Uzzell, David ( 2010/06//). Attitudes, norms, identity and environmental behaviour: Using an expanded theory of planned behaviour to predict participation in a kerbside recycling programme.. <i>NA 49</i>, p. page.259- page.284. doi: 10.1348/014466609X449395
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Hyde, Melissa K. and White, Katherine M. ( 2010/05//). Are organ donation communication decisions reasoned or reactive? A test of the utility of an augmented theory of planned behaviour with the prototype/willingness model.. <i>NA 15</i>, p. page.435- page.452. doi: 10.1348/135910709X468232
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Elliott, Mark A. ( 2010/03//). Predicting motorcyclists’ intentions to speed: Effects of selected cognitions from the theory of planned behaviour, self-identity and social identity.. <i>NA 42</i>, p. page.718- page.725. doi: 10.1016/j.aap.2009.10.021
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Pelling, Emma L. and White, Katherine M. ( 2009/12//). The theory of planned behavior applied to young people’s use of social networking Web sites.. <i>NA 12</i>, p. page.755- page.759. doi: 10.1089/cpb.2009.0109
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Hyde, Melissa K. and White, Katherine M. ( 2009/12//). Disclosing donation decisions: The role of organ donor prototypes in an extended theory of planned behaviour.. <i>NA 24</i>, p. page.1080- page.1092. doi: 10.1093/her/cyp028
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+van den Putte, Bas and Yzer, Marco and Willemsen, Marc C. and de Bruijn, Gert-Jan ( 2009/09//). The effects of smoking self-identity and quitting self-identity on attempts to quit smoking.. <i>NA 28</i>, p. page.535- page.544. doi: 10.1037/a0015199
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Hyde, Melissa K. and White, Katherine M. ( 2009/04//). To be a donor or not to be? Applying an extended theory of planned behavior to predict posthumous organ donation intentions.. <i>NA 39</i>, p. page.880- page.900. doi: 10.1111/j.1559-1816.2009.00464.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+White, Katherine M. and Wellington, Larne ( 2009/03//). Predicting participation in group parenting education in an Australian sample: The role of attitudes, norms, and control factors.. <i>NA 30</i>, p. page.173- page.189. doi: 10.1007/s10935-009-0167-y
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Fielding, Kelly S. and McDonald, Rachel and Louis, Winnifred R. ( 2008/12//). Theory of planned behaviour, identity and intentions to engage in environmental activism.. <i>NA 28</i>, p. page.318- page.326. doi: 10.1016/j.jenvp.2008.03.003
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+McMillan, Brian and Conner, Mark and Woolridge, Mike and Dyson, Lisa and Green, Josephine and Renfrew, Mary and Bharj, Kuldip and Clarke, Graham ( 2008/10//). Predicting breastfeeding in women living in areas of economic hardship: Explanatory role of the theory of planned behaviour.. <i>NA 23</i>, p. page.767- page.788. doi: 10.1080/08870440701615260
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Mason, Tania E. and White, Katherine M. ( 2008/10//). Applying an extended model of the theory of planned behaviour to breast self-examination.. <i>NA 13</i>, p. page.946- page.955. doi: 10.1177/1359105308095069
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+White, Katherine M. and Thomas, Ian and Johnston, Kim L. and Hyde, Melissa K. ( 2008/08//). Predicting attendance at peer-assisted study sessions for statistics: Role identity and the theory of planned behavior.. <i>NA 148</i>, p. page.473- page.491. doi: 10.3200/SOCP.148.4.473-492
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Smith, Joanne R. and Terry, Deborah J. and Manstead, Antony S. R. and Louis, Winnifred R. and Kotterman, Diana and Wolfs, Jaqueline ( 2008/06//). The attitude-behavior relationship in consumer conduct: The role of norms, past behavior, and self-identity.. <i>NA 148</i>, p. page.311- page.333. doi: 10.3200/SOCP.148.3.311-334
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Hamilton, Kyra and White, Katherine M. ( 2008/02//). Extending the theory of planned behavior: The role of self and social influences in predicting adolescent regular moderate-to- vigorous physical activity.. <i>NA 30</i>, p. page.56- page.74. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Smith, Joanne R. and Terry, Deborah J. and Manstead, Antony S. R. and Louis, Winnifred R. and Kotterman, Diana and Wolfs, Jacqueline ( 2007/11//). Interaction effects in the theory of planned behavior: The interplay of self-identity and past behavior.. <i>NA 37</i>, p. page.2726- page.2750. doi: 10.1111/j.1559-1816.2007.00278.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Walsh, Shari P. and White, Katherine M. ( 2007/10//). Me, my mobile, and I: The role of self- and prototypical identity influences in the prediction of mobile phone behavior.. <i>NA 37</i>, p. page.2405- page.2434. doi: 10.1111/j.1559-1816.2007.00264.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Thorbjørnsen, Helge and Pedersen, Per E. and Nysveen, Herbjørn ( 2007/09//). ‘This is who I am’: Identity expressiveness and the theory of planned behavior.. <i>NA 24</i>, p. page.763- page.785. doi: 10.1002/mar.20183
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Tsigilis, Nikolaos and Tsioumis, Konstantinos and Gregoriadis, Athanasios ( 2007/06//). Applicability of the planned behavior theory to attitudes of students in early childhood education toward teaching cutltually diverse classes: The role of self-identity.. <i>NA 100</i>, p. page.1123- page.1128. doi: 10.2466/PR0.100.3.1123-1128
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Chedzoy, S. M. and Burden, R. L. ( 2007/04//). What can psychology tell us about teaching dance? The potential contribution of Ajzen’s Theory of Planned Behavior.. <i>NA 8</i>, p. page.53- page.69. doi: 10.1080/14647890701272845
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Moan, Inger Synnøve and Rise, Jostein ( 2006/12//). Predicting smoking reduction among adolescents using an extended version of the theory of planned behaviour.. <i>NA 21</i>, p. page.717- page.738. doi: 10.1080/14768320600603448
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Hagger, Martin S. and Chatzisarantis, Nikos L. D. ( 2006/12//). Self-identity and the theory of planned behaviour: Between- and within-participants analyses.. <i>NA 45</i>, p. page.731- page.757. doi: 10.1348/014466605X85654
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Bebetsos, Evangelos and Konstantoulas, Doukas ( 2006/08//). Contact Sports, Moral Functioning and Planned Behaviour Theory.. <i>NA 103</i>, p. page.131- page.144. doi: 10.2466/PMS.103.5.131-144
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Spence, Alexa and Townsend, Ellen ( 2006/06//). Examining Consumer Behavior Toward Genetically Modified (GM) Food in Britain.. <i>NA 26</i>, p. page.657- page.670. doi: 10.1111/j.1539-6924.2006.00777.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Tsorbatzoudis, Haralambos ( 2005/12//). Evaluation of a school-based intervention programme to promote physical activity: An application of the theory of planned behavior.. <i>NA 101</i>, p. page.787- page.802. doi: 10.2466/PMS.101.7.787-802
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Tsorbatzoudis, Haralambos ( 2005/10//). Evaluation of a planned behavior theory-based intervention programme to promote healthy eating.. <i>NA 101</i>, p. page.587- page.604. doi: 10.2466/PMS.101.6.587-604
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Liu, Yifei and Doucette, William R. and Farris, Karen B. and Nayakankuppam, Dhananjay ( 2005/06//). Drug information-seeking intention and behavior after exposure to direct-to-consumer advertisement of prescription drugs.. <i>NA 1</i>, p. page.251- page.269. doi: 10.1016/j.sapharm.2005.03.010
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Moan, Inger Synnøve and Rise, Jostein ( 2005///). Quitting Smoking: Applying an Extended Version of the Theory of Planned Behavior to Predict Intention and Behavior.. <i>NA 10</i>, p. page.39- page.68. doi: 10.1111/j.1751-9861.2005.tb00003.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Giles, M. and McClenahan, C. and Cairns, E. and Mallet, J. ( 2004/08//). An application of the Theory of Planned Behaviour to blood donation: The importance of self-efficacy.. <i>NA 19</i>, p. page.380- page.391. doi: 10.1093/her/cyg063
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Evans, Daphne and Norman, Paul ( 2003/05//). Predicting adolescent pedestrians’ road-crossing intentions: An application and extension of the Theory of Planned Behaviour.. <i>NA 18</i>, p. page.267- page.277. doi: 10.1093/her/cyf023
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Cook, A. J. and Kerr, G. N. and Moore, K. ( 2002/10//). Attitudes and intentions towards purchasing GM food.. <i>NA 23</i>, p. page.557- page.572. doi: 10.1016/S0167-4870(02)00117-4
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Armitage, Christopher J. and Conner, Mark ( 2001/07//). Social cognitive determinants of blood donation.. <i>NA 31</i>, p. page.1431- page.1457. doi: 10.1111/j.1559-1816.2001.tb02681.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Conner, Mark and Flesch, Dina ( 2001/01//). Having casual sex: Additive and interactive effects of alcohol and condom availability on the determinants of intentions.. <i>NA 31</i>, p. page.89- page.112. doi: 10.1111/j.1559-1816.2001.tb02484.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Åstrøm, Anne Nordrehaug and Rise, Jostein ( 2001///). Young adults’ intention to eat healthy food: Extending the theory of planned behaviour.. <i>NA 16</i>, p. page.223- page.237. doi: 10.1080/08870440108405501
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Fekadu, Zelalem and Kraft, Pål ( 2001///). Self-identity in planned behavior perspective: Past behavior and its moderating effects on self-identity–intention relations.. <i>NA 29</i>, p. page.671- page.685. doi: 10.2224/sbp.2001.29.7.671
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Terry, Deborah J. and Hogg, Michael A. and White, Katherine M. ( 1999/09//). The theory of planned behaviour: Self-identity, social identity and group norms.. <i>NA 38</i>, p. page.225- page.244. doi: 10.1348/014466699164149
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Conner, Mark and Warren, Rachel and Close, Stephen and Sparks, Paul ( 1999/08//). Alcohol consumption and the theory of planned behavior: An examination of the cognitive mediation of past behavior.. <i>NA 29</i>, p. page.1676- page.1704. doi: 10.1111/j.1559-1816.1999.tb02046.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Armitage, Christopher J. and Conner, Mark ( 1999/07//Jul-Aug, 1999). Predictive validity of the theory of planned behaviour: The role of questionnaire format and social desirability.. <i>NA 9</i>, p. page.261- page.272. doi: 10.1002/(SICI)1099-1298(199907/08)9:4&lt;261::AID-CASP503&gt;3.0.CO;2-5
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Conner, Mark and McMillan, Brian ( 1999/06//). Interaction effects in the theory of planned behavior: Studying cannabis use.. <i>NA 38</i>, p. page.195- page.222. doi: 10.1348/014466699164121
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Armitage, Christopher J. and Conner, Mark and Norman, Paul ( 1999/06//). Differential effects of mood on information processing: Evidence from the theories of reasoned action and planned behaviour.. <i>NA 29</i>, p. page.419- page.433. doi: 10.1002/(SICI)1099-0992(199906)29:4&lt;419::AID-EJSP933&gt;3.0.CO;2-L
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Armitage, Christopher J. and Conner, Mark ( 1999/03//). The theory of planned behaviour: Assessment of predictive validity and ‘perceived control’.. <i>NA 38</i>, p. page.35- page.54. doi: 10.1348/014466699164022
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Armitage, Christopher J. and Conner, Mark ( 1999/01//). Distinguishing perceptions of control from self-efficacy: Predicting consumption of a low-fat diet using the theory of planned behavior.. <i>NA 29</i>, p. page.72- page.90. doi: 10.1111/j.1559-1816.1999.tb01375.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Evans, Daphne and Norman, Paul ( 1998/12//). Understanding pedestrians’ road crossing decisions: An application of the theory of planned behaviour.. <i>NA 13</i>, p. page.481- page.489. doi: 10.1093/her/13.4.481-a
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Sparks, Paul and Guthrie, Carol A. ( 1998/08//). Self-identity and the theory of planned behavior: A useful addition or an unhelpful artifice?. <i>NA 28</i>, p. page.1393- page.1410. doi: 10.1111/j.1559-1816.1998.tb01683.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Sparks, Paul and Shepherd, Richard and Wieringa, Nicole and Zimmermanns, Nicole ( 1995/06//). Perceived behavioural control, unrealistic optimism and dietary change: An exploratory study,.. <i>NA 24</i>, p. page.243- page.255. doi: 10.1016/S0195-6663(95)99787-3
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Theodorakis, Yannis and Bagiatis, Konstantinos and Goudas, Marios ( 1995/04//). Attitudes toward teaching individuals with disabilities: Application of planned behavior theory.. <i>NA 12</i>, p. page.151- page.160. doi: 10.1123/apaq.12.2.151
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Theodorakis, Yannis ( 1994/06//). Planned behavior, attitude strength, role identity, and the prediction of exercise behavior.. <i>NA 8</i>, p. page.149- page.165. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Sparks, Paul and Shepherd, Richard ( 1992/12//). Self-identity and the theory of planned behavior: Assessing the role of identification with ‘green consumerism.’. <i>NA 55</i>, p. page.388- page.399. doi: 10.2307/2786955
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Granberg, Donald and Holmberg, Sören ( 1990/03//). The intention-behavior relationship among U.S. and Swedish voters.. <i>NA 53</i>, p. page.44- page.54. doi: 10.2307/2786868
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Charng, Hong-wen and Piliavin, Jane A. and Callero, Peter L. ( 1988/12//). Role identity and reasoned action in the prediction of repeated behavior.. <i>NA 51</i>, p. page.303- page.317. doi: 10.2307/2786758
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Haydon, Helen M and Obst, Patricia L and Lewis, Ioni ( 2018). Examining Women’s Alcohol Consumption: The Theory of Planned Behavior and Self-Identity. <i>NA 53</i>, p. NA-NA. doi: 10.1080/10826084.2017.1327972
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Brouwer, Amanda M and Mosack, Katie E ( 2015). Expanding the theory of planned behavior to predict healthy eating behaviors: Exploring a healthy eater identity. <i>NA 45</i>, p. NA-NA. doi: 10.1108/nfs-06-2014-0055
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Kiefer, David J ( 2008). Intention to Use Dietary Supplements: The Role of Self-Identity and Past Behavior in the Theory of Planned Behavior. <i>NA NA</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Dumitrescu, Alexandrina L and Du{}{}, Carmen and Dogaru, Carmen Beatrice and Manolescu, Bogdan ( 2013). Predicting Undergraduates’ Intentions to Improve Oral Health Behaviors: The Importance of Self–Identity–A Pilot Study. <i>NA 87</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Puntoni, Stefano ( 2001). Self-identity and purchase intention: an extension of the theory of planned behaviour. <i>NA NA</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Patiro, Shine Pintor S and Budiyanti, Hety ( 2016). The Theory of Planned Behavior, Past Behavior, Situational Factors, and Self-Identity Factors Drive Indonesian Enterpreneurs to Be Indebtedness. <i>NA 11</i>, p. NA-NA. doi: 10.19166/derema.v11i1.188
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Veludo-de-Oliveira, Tania and Pallister, John G and Foxall, Gordon R ( 2013). Accounting for sustained volunteering by young people: An expanded TPB. <i>NA 24</i>, p. NA-NA. doi: 10.1007/s11266-012-9317-6
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Holst, Anne and Iversen, Julie Maria ( 2012). An application of a revised theory of planned behavior. <i>NA NA</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Jackson, Cath and Smith, Andrew and Conner, Mark ( 2003). Applying an extended version of the theory of planned behaviour to physical activity. <i>NA 21</i>, p. NA-NA. doi: 10.1080/0264041031000070976
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+B{.I}L{.I}M, {.I}BRAH{.I}M ( 2015). DETERMINANTS OF HEALTHY EATING BEHAVIOURS AMONG MIDDLE SCHOOL STUDENTS: THE THEORY OF PLANNED BEHAVIOUR APPROACH. <i>NA NA</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Wang, Yao-Fen and Wang, Chung-Jen ( 2016). Do psychological factors affect green food and beverage behaviour? An application of the theory of planned behaviour. <i>NA 118</i>, p. NA-NA. doi: 10.1108/bfj-12-2015-0469
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Verkooijen, Kirsten T and de Bruijn, Gert-Jan ( 2013). Exercise self-identity: Interactions with social comparison and exercise behaviour. <i>NA 18</i>, p. NA-NA. doi: 10.1080/13548506.2012.750727
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Carfora, Valentina ( 2016). Explaining and promoting healthy food choice: A Theory of Planned Behaviour approach. <i>NA NA</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Yazdanpanah, Masoud and Komendantova, Nadejda and Ardestani, Roshanak Shafiei ( 2015). Governance of energy transition in Iran: Investigating public acceptance and willingness to use renewable energy sources through socio-psychological model. <i>NA 45</i>, p. NA-NA. doi: 10.1016/j.rser.2015.02.002
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Pakpour, Amir H and Zeidi, Isa Mohammadi and Emamjomeh, Mohammad Mahdi and Asefzadeh, Saeed and Pearson, Heidi ( 2014). Household waste behaviours among a community sample in Iran: An application of the theory of planned behaviour. <i>NA 34</i>, p. NA-NA. doi: 10.1016/j.wasman.2013.10.028
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+White, Katherine M and Poulsen, Brooke E and Hyde, Melissa K ( 2017). Identity and personality influences on donating money, time, and blood. <i>NA 46</i>, p. NA-NA. doi: 10.1177/0899764016654280
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Karimy, Mahmood and Niknami, Shamsaddin and Hidarnia, Ali Reza and Hajizadeh, Ibrahim ( 2012). Intention to start cigarette smoking among Iranian male adolescents: usefulness of an extended version of the theory of planned behaviour. <i>NA 4</i>, p. NA-NA. doi: 10.1136/heartasia-2012-010140
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Yazdanpanah, Masoud and Hayati, Dariush and Zamani, Gholam Hossein ( 2011). INVESTIGATING AGRICULTURAL PROFESSIONALS’INTENTIONS AND BEHAVIOURS TOWARDS WATER CONSERVATION: USING A MODIFIED THEORY OF PLANNED BEHAVIOUR. <i>NA NA</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Yazdanpanah, Masoud and Forouzani, Masoumeh and Abdeshahi, Abbas and Jafari, Ahmad ( 2016). Investigating the effect of moral norm and self-identity on the intention toward water conservation among Iranian young adults. <i>NA 18</i>, p. NA-NA. doi: 10.2166/wp.2015.031
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+JENKINS, Amy ( 2015). Motivating Fruit and Vegetable Consumption Using Self-Identity. <i>NA NA</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Masser, Barbara M and White, Katherine M and Hyde, Melissa K and Terry, Deborah J and Robinson, Natalie G ( 2009). Predicting blood donation intentions and behavior among Australian blood donors: testing an extended theory of planned behavior model. <i>NA 49</i>, p. NA-NA. doi: 10.1111/j.1537-2995.2008.01981.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+McMahon, Roz and Byrne, Molly ( 2008). Predicting donation among an Irish sample of donors and nondonors: extending the theory of planned behavior. <i>NA 48</i>, p. NA-NA. doi: 10.1111/j.1537-2995.2007.01526.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Graham-Rowe, Ella and Jessop, Donna C and Sparks, Paul ( 2015). Predicting household food waste reduction using an extended theory of planned behaviour. <i>NA 101</i>, p. NA-NA. doi: 10.1016/j.resconrec.2015.05.020
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Ham, Marija and {}timac, Helena and Pap, Ana and Oec, Mag ( 2015). Predicting the intention to purchase green food in Croatia–the influence of percieved self-identity. <i>NA NA</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Masser, Barbara M and Bednall, Timothy C and White, Katherine M and Terry, Deborah ( 2012). Predicting the retention of first-time donors using an extended Theory of Planned Behavior. <i>NA 52</i>, p. NA-NA. doi: 10.1111/j.1537-2995.2011.03479.x
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Celuch, Kevin and Slama, Mark ( 2002). Promoting critical thinking and life-long learning: An experiment with the theory of planned behavior. <i>NA 12</i>, p. NA-NA. doi: 10.1080/10528008.2002.11488782
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Santina, Tania and Godin, Gaston and Gagn{'e}, Camille and Guillaumie, Laurence ( 2017). Psychosocial determinants of physical activity at school among Lebanese children: an application of the planned behavior theory. <i>NA NA</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Wevers, Anne and Wigboldus, Dani{&quot;e}l HJ and van Baaren, Rick and Veldhuizen, Ingrid JT ( 2014). Return behavior of occasional and multigallon blood donors: the role of theory of planned behavior, self-identity, and organizational variables. <i>NA 54</i>, p. NA-NA. doi: 10.1111/trf.12309
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Manning, Mark ( 2006). The joint effects of persuasion and implementation intentions: an investigation using the theory of planned behavior.. <i>NA NA</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Dennis, Bryan S and Buchholtz, Ann K and Butts, Marcus M ( 2009). The nature of giving: A theory of planned behavior examination of corporate philanthropy. <i>NA 48</i>, p. NA-NA. doi: 10.1177/0007650307305368
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Alselaimi, Abdullah ( 2010). Using the Theory of Planned Behaviour to investigate the antecedents of physical activity participation among Saudi adolescents. <i>NA NA</i>, p. NA-NA. <a href="doi:NA" class="uri">doi:NA</a>
+</div>
+<div style="padding-left: 20px; text-indent: -20px ;">
+Jebarajakirthy, Charles and Lobo, Antonio C ( 2014). War affected youth as consumers of microcredit: an application and extension of the theory of planned behaviour. <i>NA 21</i>, p. NA-NA. doi: 10.1016/j.jretconser.2014.02.003
 </div>
 </div>
 
