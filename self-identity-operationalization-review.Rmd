@@ -165,7 +165,7 @@ aspectStimulusFragments <- list(importantPart = "important part",
                                 believeIn = "believe in",
                                 meansMoreThan = "means more than",
                                 howIWantToLive = "want(ed)* to live",
-                                rarelyEvenThinkAbout = "rarely (even )*think about",
+                                rarelyEvenThinkAbout = c("rarely (even )*think about", "reflect about .* a lot"),
                                 kindOfPerson = c("kind of person", "type of (a )*person",
                                                  "fits who they are", "typical (person|for me)", "out of character",
                                                  "alien", "in my character", "I(.{1,2}m) a good example of",
@@ -187,7 +187,8 @@ aspectStimulusFragments <- list(importantPart = "important part",
                                                   "most important issue(s)*",
                                                   "I involve in", "feelings",
                                                   "goals related to",
-                                                  "relevant to me", "each of us"),
+                                                  "relevant to me", "each of us",
+                                                  "makes me feel as a good member"),
                                 domainSpecific = c("read the list of"),
                                 selfAs = "self (as|to be)",
                                 role = c("role", "person primarily responsible"),
@@ -195,7 +196,7 @@ aspectStimulusFragments <- list(importantPart = "important part",
                                 express = "express",
                                 lifestyle = "lifestyle",
                                 image = "image",
-                                values = "values",                                beingUnique = "being unique",
+                                values = "values",
                                 important = "important",
                                 personal = "personal",
                                 characteristics = "characteristics",
@@ -241,10 +242,12 @@ nrow(longResults) - sum(longResults$anyMatch);
 apply(longResults[, names(aspectStimulusFragments)], 1, sum)
 
 ### Store categorisation in one column
+# longResults$category <-
+#   unlist(lapply(apply(longResults[, names(aspectStimulusFragments)], 1, which),
+#                 function(x) return(ifelse(is.logical(x), 'uncategorized',
+#                                           names(x)))));
 longResults$category <-
-  unlist(lapply(apply(longResults[, names(aspectStimulusFragments)], 1, which),
-                function(x) return(ifelse(is.logical(x), 'uncategorized',
-                                          names(x)))));
+  names(aspectStimulusFragments)[apply(longResults[, names(aspectStimulusFragments)], 1, which)];
 
 ### Sort by category
 longResults <- longResults[order(longResults$category), ];
@@ -261,7 +264,11 @@ write.csv(longResults[longResults$anyMatch|1, c('category',
 
 ```
 
-## Discussion of operationalisation categories
+## Discussion of operationalisation categories {.tabset}
+
+### Discussion
+
+In this discussion, we discuss all categories on the basis of the items captured in each category. To view the items, see the 'Items' tab.
 
 - **appropriateForMe**: This operationalisation conflates perceived normative aspects with self-identity. Therefore, although it likely partly measures self-identity, because it also measures perceived approval of others, it is not a suitable item in a self-identity operationaliation. *Exclude*
 - **believeIn**: This does not satisfy our criteria that 1) the item must contain a reference to the self, and 2) the item must include the target behavior. *Exclude*
@@ -294,10 +301,23 @@ write.csv(longResults[longResults$anyMatch|1, c('category',
 - **should**: These items do not assess self-identity (but perhaps norms or attitude). *Exclude*
 - **values**: These items assess personal norms or attitude rather than self-identity. *Exclude*
 
+### Items
+
+```{r}
+
+knitr::kable(longResults[longResults$anyMatch|1, c('category',
+                                                   'operationalisation',
+                                                   'bibtexkey',
+                                                   'author',
+                                                   'title',
+                                                   'year')]);
+
+```
+
 ```{r firstIteration}
 
 excluded_revision1 <- c('acceptibility', 'appropriateForMe',
-                        'beingUnique', 'believeIn', 'characteristics',
+                        'believeIn', 'characteristics',
                         'domainSpecific', 'embarrassed',
                         'howIWantToLive', 'important',
                         'importantToMe', 'lifestyle',
@@ -345,21 +365,36 @@ write.csv(longResults[longResults$anyMatch|1, c('category_revision1',
 
 ```
 
-## Discussion of first revision of operationalisation categories
+## Discussion of first revision of operationalisation categories {.tabset}
+
+### Discussion
 
 - **amSomeoneWho**: These items are practically identical to the items in the 'considerMyself' category, so we merge these. *merge*
 - **concernedAbout**: This is a unique category of operationalisations; the only one assessing relevance of affect in self-regulation. *retain*
 - **considerMyself**: This is one of the main categories, assessing how people see themselves. *retain*
 - **excluded**: We verified all excluded categories and operationalisations, and this category does not seem to include any operationalisation that measured self-identity but were not already present in another category. Therefore, we conclude that this category is ok.
-- **express**: Expressing self-identity is a consequence that will often -*but not always*- co-occur with self-identity, and so is easily confused. However, desiring to express self-identity is not the same as self-identity itself, and so we excude this item. *exclude*
+- **express**: Expressing self-identity is a consequence that will often -- *but not always* -- co-occur with self-identity, and so is easily confused. However, desiring to express self-identity is not the same as self-identity itself, and so we excude this item. *exclude*
 - **feelAtALoss**: This also taps affect, but differently; it has connotations of loss, bereavement, and mourning. These operationalisations assess the degree to which a given target (e.g. behavior) is relevant to one self in a way somewhat comparable to how loved ones are relevant. *retain*
 - **iAm**: This category measures the degree to which people use a given target (e.g. behavior) in self-description, which is part of the definition of self-identity (i.e. this measures whether people see themselves in this way). *retain*
 - **importantPart**: We retain this category: this is an often used operationalisation. *retain*
 - **kindOfPerson**: Like the operationalisations measuring 'important part', we retain this category. *retain*
 - **meansMoreThan**: This can be considered a positive phrasing of the 'feel at a loss' category. We re-read our conclusion from last time, and have not resolved this. We will retain this category for now. *retain*
 - **rarelyEvenThinkAbout**: Retain, same reasoning as last time. *retain*
-- **self**: The only useful operatioanlisations in this category are the direct measures of self-identity: this idea of directly asking participants whether a target (e.g. a behavior) is part of their self-identity or self-concept is different and useful. We are sceptical of whether such direct measurement is possible, and in any case this is a very different category of operationalisations. We will discuss this possibility in the paper's discussion, but exclude it in this list as falling without the scope of the current investigation, where we seek to operationalize self-identity's aspects. *exclude*
+- **self**: The only useful operationalisations in this category are the direct measures of self-identity: this idea of directly asking participants whether a target (e.g. a behavior) is part of their self-identity or self-concept is different and useful. We are sceptical of whether such direct measurement is possible, and in any case this is a very different category of operationalisations. We will discuss this possibility in the paper's discussion, but exclude it in this list as falling without the scope of the current investigation, where we seek to operationalize self-identity's aspects. *exclude*
 - **selfAs**: Merge with considerAs: these are all synonyms of 'to perceive'. *merge*
+
+### Items
+
+```{r}
+
+knitr::kable(longResults[longResults$anyMatch|1, c('category',
+                                                   'operationalisation',
+                                                   'bibtexkey',
+                                                   'author',
+                                                   'title',
+                                                   'year')]);
+
+```
 
 ```{r secondIteration}
 
@@ -401,7 +436,9 @@ write.csv(longResults[longResults$anyMatch|1, c('category_revision2',
 
 ```
 
-## Discussion of second revision of operationalisation categories
+## Discussion of second revision of operationalisation categories {.tabset}
+
+### Discussion
 
 * concernedAbout: this is a very homogeneous category. We cannot identify further improvements. In fact, the category is so homogeneous that we can already identify a prototypical item: **"I [see|think of|consider] myself as someone who is concerned about [TARGET]"**.
 
@@ -409,7 +446,7 @@ write.csv(longResults[longResults$anyMatch|1, c('category_revision2',
 
 * feelAtALoss: this category is again very homogeneous: a prototypical item is **"I would feel at a loss if I were forced to give up [TARGET]"**.
 
-* iAm: This is linguistically again quite heterogeneous, but all items seem to contain some statement of 'being', e.g. "I am", combined with a description of the relevant identity. The only variation is where the item stem is "I am the type of", "I am a person who", "I am the sort of person who", which are a bit more broad, but actually belong in the 'kindOfPerson' category. The problem of this 'I am' category is that they can only be used for targets (e.g. target behaviors) where a clear verbal label exists for the identity associated with that behavior. This means these items would be quite narrowly applicable. We will therefore not retain this item for the generic scale we are working towards.
+* iAm: This is linguistically again quite heterogeneous, but all items seem to contain some statement of 'being', e.g. "I am", combined with a description of the relevant identity. The only variation is where the item stem is "I am the type of", "I am a person who", "I am the sort of person who", which are a bit more broad, but actually belong in the 'kindOfPerson' category. The problem of this 'I am' category is that they can only be used for targets (e.g. target behaviors) where a clear verbal label exists for the identity associated with that behavior. This means these items would be quite narrowly applicable. We will therefore not retain this item for the generic scale we are working towards. *exclude*
 
 * importantPart: This is another homogeneous category, with as prototypical item: **"[TARGET] is an important part of who I am"**.
 
@@ -418,6 +455,19 @@ write.csv(longResults[longResults$anyMatch|1, c('category_revision2',
 * meansMoreThan: These items are all the same - **"For me, [TARGET] means more than just the act itself"**.
 
 * rarelyEvenThinkAbout: This is the only true reverse item. Other items create reversed versions by adding a negation. This would therefore be good to retain. Prototypical item: **"[TARGET] is something I rarely even think about"**.
+
+### Items
+
+```{r}
+
+knitr::kable(longResults[longResults$anyMatch|1, c('category',
+                                                   'operationalisation',
+                                                   'bibtexkey',
+                                                   'author',
+                                                   'title',
+                                                   'year')]);
+
+```
 
 ## Final initial item pool
 
