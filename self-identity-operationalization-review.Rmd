@@ -556,8 +556,13 @@ write.csv(allOperationalisationsCategorised,
 
 ### Selected included articles
 referenceDf <- queryHits[[1]]$records[grepl('incl', queryHits[[1]]$records$review_items), ];
+
+### Do some cleaning
 referenceDf$author <- trimws(referenceDf$author);
 referenceDf$title <- trimws(referenceDf$title);
+### Remove final period if it's there
+referenceDf$title <-
+  gsub("\\.$", "", referenceDf$title);
 referenceDf$year <- trimws(gsub(".*(\\d{4}).*", "\\1", referenceDf$year));
 
 referenceDf$startpage <-
@@ -573,15 +578,36 @@ referenceDf$pagesProper <-
          referenceDf$pagerange,
          referenceDf$pagesrange);
 
+referenceDf$pagesBit <-
+  ifelse(is.na(referenceDf$pagesProper),
+         "",
+         paste0(", pp. ", referenceDf$pagesProper));
+
 referenceDf$secTitle <-
   ifelse(is.na(referenceDf$journal),
          referenceDf$title.secundary,
          paste(referenceDf$journal, referenceDf$volume));
 
+referenceDf$secTitle <-
+  ifelse(is.na(referenceDf$secTitle),
+         "",
+         paste0("<i>", referenceDf$secTitle, "</i>"));
+
+referenceDf$doiBit <-
+  ifelse(is.na(referenceDf$doi),
+         "",
+         paste0(" doi:", trimws(referenceDf$doi)));
+
+referenceDf$secTitlePeriod <-
+  ifelse(is.na(referenceDf$secTitle) && is.na(referenceDf$pagesBit),
+         "",
+         ".");
+         
+
 referenceDf <-
   referenceDf %>%
   dplyr::mutate(reference_html = 
-                  glue("<div style='padding-left: 20px; text-indent: -20px ;'>{author} ({year}). {title}. <i>{secTitle}</i>, p. {pagesProper}. doi:{doi}</div>"));
+                  glue("<div style='padding-left: 20px; text-indent: -20px ;'>{author} ({year}). {title}. {secTitle}{pagesBit}{secTitlePeriod}{doiBit}</div>"));
 
 cat(referenceDf$reference_html);
 
