@@ -506,10 +506,32 @@ write.csv(allOperationalisationsCategorised,
 
 ### Selected included articles
 referenceDf <- queryHits[[1]]$records[grepl('incl', queryHits[[1]]$records$review_items), ];
+referenceDf$author <- trimws(referenceDf$author);
+referenceDf$title <- trimws(referenceDf$title);
+referenceDf$year <- trimws(gsub(".*(\\d{4}).*", "\\1", referenceDf$year));
+
+referenceDf$startpage <-
+  trimws(gsub("[^0-9]*([0-9]+)[^0-9]*", "\\1", referenceDf$page.start));
+referenceDf$endpage <-
+  trimws(gsub("[^0-9]*([0-9]+)[^0-9]*", "\\1", referenceDf$page.end));
+referenceDf$pagerange <-
+  paste0(referenceDf$startpage, "-", referenceDf$endpage);
+referenceDf$pagesrange <-
+  trimws(gsub("[^0-9]*([0-9]+)[^0-9]*([0-9]+)[^0-9]*", "\\1-\\2", referenceDf$pages));
+referenceDf$pagesProper <-
+  ifelse(is.na(referenceDf$pagesrange),
+         referenceDf$pagerange,
+         referenceDf$pagesrange);
+
+referenceDf$secTitle <-
+  ifelse(is.na(referenceDf$journal),
+         referenceDf$title.secundary,
+         paste(referenceDf$journal, referenceDf$volume));
+
 referenceDf <-
   referenceDf %>%
   dplyr::mutate(reference_html = 
-                  glue("<div style='padding-left: 20px; text-indent: -20px ;'>{author} ({year}). {title}. <i>{journal} {volume}</i>, p. {pages}. doi:{doi}</div>"));
+                  glue("<div style='padding-left: 20px; text-indent: -20px ;'>{author} ({year}). {title}. <i>{secTitle}</i>, p. {pagesProper}. doi:{doi}</div>"));
 
 cat(referenceDf$reference_html);
 
