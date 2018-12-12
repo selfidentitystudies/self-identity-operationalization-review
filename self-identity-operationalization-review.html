@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Marwin Snippe, Gjalt-Jorn Ygram Peters &amp; Gerjo Kok" />
+<meta name="author" content="Marwin H. M. Snippe, Gjalt-Jorn Y. Peters &amp; Gerjo Kok" />
 
 
 <title>The Operationalisation of Self-Identity in Reasoned Action Models: A systematic review of self-identity operationalisations in 30 years of research</title>
@@ -245,8 +245,8 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">The Operationalisation of Self-Identity in Reasoned Action Models: A systematic review of self-identity operationalisations in 30 years of research</h1>
-<h4 class="author"><em>Marwin Snippe, Gjalt-Jorn Ygram Peters &amp; Gerjo Kok</em></h4>
-<h4 class="date"><em>13:45:13 on 2018-12-12 CET (GMT+0100)</em></h4>
+<h4 class="author"><em>Marwin H. M. Snippe, Gjalt-Jorn Y. Peters &amp; Gerjo Kok</em></h4>
+<h4 class="date"><em>13:54:55 on 2018-12-12 CET (GMT+0100)</em></h4>
 
 </div>
 
@@ -10203,85 +10203,430 @@ write.csv(longResults[longResults$anyMatch|1, c('category_revision2',
 <div id="number-of-operationalisations-in-each-category-in-each-phase" class="section level2">
 <h2>Number of operationalisations in each category in each phase</h2>
 <pre class="r"><code>cat0(&quot;\n\n### Round 1\n\n&quot;);</code></pre>
-<pre><code>## 
-## 
-## ### Round 1</code></pre>
+<div id="round-1" class="section level3">
+<h3>Round 1</h3>
 <pre class="r"><code>print(knitr::kable(userfriendlyscience::freq(longResults$category)$dat));</code></pre>
-<pre><code>## 
-## 
-##                            Frequencies   Perc.Total   Perc.Valid   Cumulative
-## ------------------------  ------------  -----------  -----------  -----------
-## appropriateForMe                     2          0.6          0.6          0.6
-## believeIn                            1          0.3          0.3          0.9
-## characteristics                      1          0.3          0.3          1.2
-## concernedAbout                      30          8.8          8.8          9.9
-## considerMyself                      23          6.7          6.7         16.7
-## domainSpecific                       2          0.6          0.6         17.3
-## embarrassed                          1          0.3          0.3         17.5
-## express                              4          1.2          1.2         18.7
-## feelAtALoss                         16          4.7          4.7         23.4
-## howIWantToLive                       5          1.5          1.5         24.9
-## iAm                                 14          4.1          4.1         28.9
-## iAmA                                12          3.5          3.5         32.5
-## image                                2          0.6          0.6         33.0
-## important                            5          1.5          1.5         34.5
-## importantPart                       48         14.0         14.0         48.5
-## importantToMe                        6          1.8          1.8         50.3
-## kindOfPerson                        56         16.4         16.4         66.7
-## lifestyle                            1          0.3          0.3         67.0
-## meansMoreThan                        7          2.0          2.0         69.0
-## miscellaneous                       25          7.3          7.3         76.3
-## perceivedProjectedImage              3          0.9          0.9         77.2
-## personal                             3          0.9          0.9         78.1
-## rarelyEvenThinkAbout                 6          1.8          1.8         79.8
-## role                                 5          1.5          1.5         81.3
-## roleIdentity                         1          0.3          0.3         81.6
-## self                                 3          0.9          0.9         82.5
-## selfAs                              57         16.7         16.7         99.1
-## should                               2          0.6          0.6         99.7
-## values                               1          0.3          0.3        100.0
-## Total valid                        342        100.0        100.0           NA</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Frequencies</th>
+<th align="right">Perc.Total</th>
+<th align="right">Perc.Valid</th>
+<th align="right">Cumulative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>appropriateForMe</td>
+<td align="right">2</td>
+<td align="right">0.6</td>
+<td align="right">0.6</td>
+<td align="right">0.6</td>
+</tr>
+<tr class="even">
+<td>believeIn</td>
+<td align="right">1</td>
+<td align="right">0.3</td>
+<td align="right">0.3</td>
+<td align="right">0.9</td>
+</tr>
+<tr class="odd">
+<td>characteristics</td>
+<td align="right">1</td>
+<td align="right">0.3</td>
+<td align="right">0.3</td>
+<td align="right">1.2</td>
+</tr>
+<tr class="even">
+<td>concernedAbout</td>
+<td align="right">30</td>
+<td align="right">8.8</td>
+<td align="right">8.8</td>
+<td align="right">9.9</td>
+</tr>
+<tr class="odd">
+<td>considerMyself</td>
+<td align="right">23</td>
+<td align="right">6.7</td>
+<td align="right">6.7</td>
+<td align="right">16.7</td>
+</tr>
+<tr class="even">
+<td>domainSpecific</td>
+<td align="right">2</td>
+<td align="right">0.6</td>
+<td align="right">0.6</td>
+<td align="right">17.3</td>
+</tr>
+<tr class="odd">
+<td>embarrassed</td>
+<td align="right">1</td>
+<td align="right">0.3</td>
+<td align="right">0.3</td>
+<td align="right">17.5</td>
+</tr>
+<tr class="even">
+<td>express</td>
+<td align="right">4</td>
+<td align="right">1.2</td>
+<td align="right">1.2</td>
+<td align="right">18.7</td>
+</tr>
+<tr class="odd">
+<td>feelAtALoss</td>
+<td align="right">16</td>
+<td align="right">4.7</td>
+<td align="right">4.7</td>
+<td align="right">23.4</td>
+</tr>
+<tr class="even">
+<td>howIWantToLive</td>
+<td align="right">5</td>
+<td align="right">1.5</td>
+<td align="right">1.5</td>
+<td align="right">24.9</td>
+</tr>
+<tr class="odd">
+<td>iAm</td>
+<td align="right">14</td>
+<td align="right">4.1</td>
+<td align="right">4.1</td>
+<td align="right">28.9</td>
+</tr>
+<tr class="even">
+<td>iAmA</td>
+<td align="right">12</td>
+<td align="right">3.5</td>
+<td align="right">3.5</td>
+<td align="right">32.5</td>
+</tr>
+<tr class="odd">
+<td>image</td>
+<td align="right">2</td>
+<td align="right">0.6</td>
+<td align="right">0.6</td>
+<td align="right">33.0</td>
+</tr>
+<tr class="even">
+<td>important</td>
+<td align="right">5</td>
+<td align="right">1.5</td>
+<td align="right">1.5</td>
+<td align="right">34.5</td>
+</tr>
+<tr class="odd">
+<td>importantPart</td>
+<td align="right">48</td>
+<td align="right">14.0</td>
+<td align="right">14.0</td>
+<td align="right">48.5</td>
+</tr>
+<tr class="even">
+<td>importantToMe</td>
+<td align="right">6</td>
+<td align="right">1.8</td>
+<td align="right">1.8</td>
+<td align="right">50.3</td>
+</tr>
+<tr class="odd">
+<td>kindOfPerson</td>
+<td align="right">56</td>
+<td align="right">16.4</td>
+<td align="right">16.4</td>
+<td align="right">66.7</td>
+</tr>
+<tr class="even">
+<td>lifestyle</td>
+<td align="right">1</td>
+<td align="right">0.3</td>
+<td align="right">0.3</td>
+<td align="right">67.0</td>
+</tr>
+<tr class="odd">
+<td>meansMoreThan</td>
+<td align="right">7</td>
+<td align="right">2.0</td>
+<td align="right">2.0</td>
+<td align="right">69.0</td>
+</tr>
+<tr class="even">
+<td>miscellaneous</td>
+<td align="right">25</td>
+<td align="right">7.3</td>
+<td align="right">7.3</td>
+<td align="right">76.3</td>
+</tr>
+<tr class="odd">
+<td>perceivedProjectedImage</td>
+<td align="right">3</td>
+<td align="right">0.9</td>
+<td align="right">0.9</td>
+<td align="right">77.2</td>
+</tr>
+<tr class="even">
+<td>personal</td>
+<td align="right">3</td>
+<td align="right">0.9</td>
+<td align="right">0.9</td>
+<td align="right">78.1</td>
+</tr>
+<tr class="odd">
+<td>rarelyEvenThinkAbout</td>
+<td align="right">6</td>
+<td align="right">1.8</td>
+<td align="right">1.8</td>
+<td align="right">79.8</td>
+</tr>
+<tr class="even">
+<td>role</td>
+<td align="right">5</td>
+<td align="right">1.5</td>
+<td align="right">1.5</td>
+<td align="right">81.3</td>
+</tr>
+<tr class="odd">
+<td>roleIdentity</td>
+<td align="right">1</td>
+<td align="right">0.3</td>
+<td align="right">0.3</td>
+<td align="right">81.6</td>
+</tr>
+<tr class="even">
+<td>self</td>
+<td align="right">3</td>
+<td align="right">0.9</td>
+<td align="right">0.9</td>
+<td align="right">82.5</td>
+</tr>
+<tr class="odd">
+<td>selfAs</td>
+<td align="right">57</td>
+<td align="right">16.7</td>
+<td align="right">16.7</td>
+<td align="right">99.1</td>
+</tr>
+<tr class="even">
+<td>should</td>
+<td align="right">2</td>
+<td align="right">0.6</td>
+<td align="right">0.6</td>
+<td align="right">99.7</td>
+</tr>
+<tr class="odd">
+<td>values</td>
+<td align="right">1</td>
+<td align="right">0.3</td>
+<td align="right">0.3</td>
+<td align="right">100.0</td>
+</tr>
+<tr class="even">
+<td>Total valid</td>
+<td align="right">342</td>
+<td align="right">100.0</td>
+<td align="right">100.0</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>cat0(&quot;\n\n### Round 2\n\n&quot;);</code></pre>
-<pre><code>## 
-## 
-## ### Round 2</code></pre>
+</div>
+<div id="round-2" class="section level3">
+<h3>Round 2</h3>
 <pre class="r"><code>print(knitr::kable(userfriendlyscience::freq(longResults$category_revision1)$dat));</code></pre>
-<pre><code>## 
-## 
-##                         Frequencies   Perc.Total   Perc.Valid   Cumulative
-## ---------------------  ------------  -----------  -----------  -----------
-## concernedAbout                   30          8.8          8.8          8.8
-## considerMyself                   23          6.7          6.7         15.5
-## excluded                         64         18.7         18.7         34.2
-## express                           4          1.2          1.2         35.4
-## feelAtALoss                      16          4.7          4.7         40.1
-## iAm                              26          7.6          7.6         47.7
-## importantPart                    48         14.0         14.0         61.7
-## kindOfPerson                     56         16.4         16.4         78.1
-## meansMoreThan                     7          2.0          2.0         80.1
-## rarelyEvenThinkAbout              6          1.8          1.8         81.9
-## self                              3          0.9          0.9         82.7
-## selfAs                           59         17.3         17.3        100.0
-## Total valid                     342        100.0        100.0           NA</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Frequencies</th>
+<th align="right">Perc.Total</th>
+<th align="right">Perc.Valid</th>
+<th align="right">Cumulative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>concernedAbout</td>
+<td align="right">30</td>
+<td align="right">8.8</td>
+<td align="right">8.8</td>
+<td align="right">8.8</td>
+</tr>
+<tr class="even">
+<td>considerMyself</td>
+<td align="right">23</td>
+<td align="right">6.7</td>
+<td align="right">6.7</td>
+<td align="right">15.5</td>
+</tr>
+<tr class="odd">
+<td>excluded</td>
+<td align="right">64</td>
+<td align="right">18.7</td>
+<td align="right">18.7</td>
+<td align="right">34.2</td>
+</tr>
+<tr class="even">
+<td>express</td>
+<td align="right">4</td>
+<td align="right">1.2</td>
+<td align="right">1.2</td>
+<td align="right">35.4</td>
+</tr>
+<tr class="odd">
+<td>feelAtALoss</td>
+<td align="right">16</td>
+<td align="right">4.7</td>
+<td align="right">4.7</td>
+<td align="right">40.1</td>
+</tr>
+<tr class="even">
+<td>iAm</td>
+<td align="right">26</td>
+<td align="right">7.6</td>
+<td align="right">7.6</td>
+<td align="right">47.7</td>
+</tr>
+<tr class="odd">
+<td>importantPart</td>
+<td align="right">48</td>
+<td align="right">14.0</td>
+<td align="right">14.0</td>
+<td align="right">61.7</td>
+</tr>
+<tr class="even">
+<td>kindOfPerson</td>
+<td align="right">56</td>
+<td align="right">16.4</td>
+<td align="right">16.4</td>
+<td align="right">78.1</td>
+</tr>
+<tr class="odd">
+<td>meansMoreThan</td>
+<td align="right">7</td>
+<td align="right">2.0</td>
+<td align="right">2.0</td>
+<td align="right">80.1</td>
+</tr>
+<tr class="even">
+<td>rarelyEvenThinkAbout</td>
+<td align="right">6</td>
+<td align="right">1.8</td>
+<td align="right">1.8</td>
+<td align="right">81.9</td>
+</tr>
+<tr class="odd">
+<td>self</td>
+<td align="right">3</td>
+<td align="right">0.9</td>
+<td align="right">0.9</td>
+<td align="right">82.7</td>
+</tr>
+<tr class="even">
+<td>selfAs</td>
+<td align="right">59</td>
+<td align="right">17.3</td>
+<td align="right">17.3</td>
+<td align="right">100.0</td>
+</tr>
+<tr class="odd">
+<td>Total valid</td>
+<td align="right">342</td>
+<td align="right">100.0</td>
+<td align="right">100.0</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>cat0(&quot;\n\n### Round 3\n\n&quot;);</code></pre>
-<pre><code>## 
-## 
-## ### Round 3</code></pre>
+</div>
+<div id="round-3" class="section level3">
+<h3>Round 3</h3>
 <pre class="r"><code>print(knitr::kable(userfriendlyscience::freq(longResults$category_revision2)$dat));</code></pre>
-<pre><code>## 
-## 
-##                         Frequencies   Perc.Total   Perc.Valid   Cumulative
-## ---------------------  ------------  -----------  -----------  -----------
-## concernedAbout                   30          8.8          8.8          8.8
-## considerMyself                   82         24.0         24.0         32.7
-## excluded                         71         20.8         20.8         53.5
-## feelAtALoss                      16          4.7          4.7         58.2
-## iAm                              26          7.6          7.6         65.8
-## importantPart                    48         14.0         14.0         79.8
-## kindOfPerson                     56         16.4         16.4         96.2
-## meansMoreThan                     7          2.0          2.0         98.2
-## rarelyEvenThinkAbout              6          1.8          1.8        100.0
-## Total valid                     342        100.0        100.0           NA</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Frequencies</th>
+<th align="right">Perc.Total</th>
+<th align="right">Perc.Valid</th>
+<th align="right">Cumulative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>concernedAbout</td>
+<td align="right">30</td>
+<td align="right">8.8</td>
+<td align="right">8.8</td>
+<td align="right">8.8</td>
+</tr>
+<tr class="even">
+<td>considerMyself</td>
+<td align="right">82</td>
+<td align="right">24.0</td>
+<td align="right">24.0</td>
+<td align="right">32.7</td>
+</tr>
+<tr class="odd">
+<td>excluded</td>
+<td align="right">71</td>
+<td align="right">20.8</td>
+<td align="right">20.8</td>
+<td align="right">53.5</td>
+</tr>
+<tr class="even">
+<td>feelAtALoss</td>
+<td align="right">16</td>
+<td align="right">4.7</td>
+<td align="right">4.7</td>
+<td align="right">58.2</td>
+</tr>
+<tr class="odd">
+<td>iAm</td>
+<td align="right">26</td>
+<td align="right">7.6</td>
+<td align="right">7.6</td>
+<td align="right">65.8</td>
+</tr>
+<tr class="even">
+<td>importantPart</td>
+<td align="right">48</td>
+<td align="right">14.0</td>
+<td align="right">14.0</td>
+<td align="right">79.8</td>
+</tr>
+<tr class="odd">
+<td>kindOfPerson</td>
+<td align="right">56</td>
+<td align="right">16.4</td>
+<td align="right">16.4</td>
+<td align="right">96.2</td>
+</tr>
+<tr class="even">
+<td>meansMoreThan</td>
+<td align="right">7</td>
+<td align="right">2.0</td>
+<td align="right">2.0</td>
+<td align="right">98.2</td>
+</tr>
+<tr class="odd">
+<td>rarelyEvenThinkAbout</td>
+<td align="right">6</td>
+<td align="right">1.8</td>
+<td align="right">1.8</td>
+<td align="right">100.0</td>
+</tr>
+<tr class="even">
+<td>Total valid</td>
+<td align="right">342</td>
+<td align="right">100.0</td>
+<td align="right">100.0</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div id="a-table-with-all-operationalisations" class="section level2">
 <h2>A table with all operationalisations</h2>

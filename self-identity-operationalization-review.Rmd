@@ -1,6 +1,6 @@
 ---
 title: "The Operationalisation of Self-Identity in Reasoned Action Models: A systematic review of self-identity operationalisations in 30 years of research"
-author: "Marwin Snippe, Gjalt-Jorn Ygram Peters & Gerjo Kok"
+author: "Marwin H. M. Snippe, Gjalt-Jorn Y. Peters & Gerjo Kok"
 date: "`r format(Sys.time(), '%H:%M:%S on %Y-%m-%d %Z (GMT%z)')`"
 output:
   html_document:
@@ -483,7 +483,7 @@ In conclusion, it seems that based on the self-identity literature, the followin
 
 ## Number of operationalisations in each category in each phase
 
-```{r operationalisations-per-category, results='as-is'}
+```{r operationalisations-per-category, results='asis'}
 
 cat0("\n\n### Round 1\n\n");
 
