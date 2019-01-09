@@ -1,5 +1,5 @@
 ---
-title: "The Operationalisation of Self-Identity in Reasoned Action Models: A systematic review of self-identity operationalisations in 30 years of research"
+title: "The Operationalisation of Self-Identity in Reasoned Action Models: A systematic review of self-identity operationalisations in three decades years of research"
 author: "Marwin H. M. Snippe, Gjalt-Jorn Y. Peters & Gerjo Kok"
 date: "`r format(Sys.time(), '%H:%M:%S on %Y-%m-%d %Z (GMT%z)')`"
 output:
@@ -295,7 +295,6 @@ In this discussion, we discuss all categories on the basis of the items captured
 - **rarelyEvenThinkAbout**: This is a negative formulation: for people for whom a behavior is important to their self-identity, the behavior will be more salient. This item should be retained. *Retain*
 - **role**: These items can easily be interpreted as referring to a formal role: all students at a university have that role of student, but they don't always identify as a student. *Exclude*
 - **roleIdentity**: This does not seem to be an operationalisation of self-identity. *Exclude*
-- **seeMyself**: This is the same category as I 'consider myself'. *Merge*
 - **self**: This is a category that consists of operationalisations that matched 'self' but did not match any other categories. As a result, it's a quite broad category. Some of the operationalisations reflect other categories we already encountered, but some reflect a new operationalisation: a direct measurement of self-identity. This are the operationalisations that contain 'self-identity' or 'self-concept'. *Retain*
 - **selfAs**: This is a distinct operationalisation from the 'consider myself' category. *Retain*
 - **should**: These items do not assess self-identity (but perhaps norms or attitude). *Exclude*
@@ -471,13 +470,25 @@ knitr::kable(longResults[longResults$anyMatch|1, c('category',
 
 ## Final initial item pool
 
-In conclusion, it seems that based on the self-identity literature, the following prototypical items would form a good initial item pool:
+In conclusion, it seems that based on the self-identity literature, the following prototypical item variations emerge:
 
-- **"I [see|think of|consider] myself as someone who is concerned about [TARGET BEHAVIOR]"**
-- **"I [see|think of|consider] myself as someone who [TARGET BEHAVIOR]"**
+- "I [see|think of|consider] myself as someone who is concerned about [TARGET BEHAVIOR]"
+- "I [see|think of|consider] myself as someone who [TARGET BEHAVIOR]"
+- "I would feel at a loss if I were forced to give up [TARGET BEHAVIOR]"
+- "[TARGET BEHAVIOR] is an important part of who I am"
+- "I am the [kind|type|sort] of person who [TARGET BEHAVIOR]"
+- "For me, [TARGET BEHAVIOR] means more than just the act itself"
+- "[TARGET BEHAVIOR] is something I rarely even think about"
+
+Because uniformity in measurement is important, we have selected one form of those items that occurred frequently in a number of variations.
+
+This is the final set of self-identity items:
+
+- **"I see myself as someone who is concerned about [TARGET BEHAVIOR]"**
+- **"I see myself as someone who [TARGET BEHAVIOR]"**
 - **"I would feel at a loss if I were forced to give up [TARGET BEHAVIOR]"**
 - **"[TARGET BEHAVIOR] is an important part of who I am"**
-- **"I am the [kind|type|sort] of person who [TARGET BEHAVIOR]"**
+- **"I am the kind of person who [TARGET BEHAVIOR]"**
 - **"For me, [TARGET BEHAVIOR] means more than just the act itself"**
 - **"[TARGET BEHAVIOR] is something I rarely even think about"**
 
@@ -557,6 +568,56 @@ write.csv(allOperationalisationsCategorised,
 ### Selected included articles
 referenceDf <- queryHits[[1]]$records[grepl('incl', queryHits[[1]]$records$review_items), ];
 
+### Convert to Bibtex and export
+dataframeToBibTex <- function(dataframe) {
+  res <- apply(dataframe, 1,
+               function(x) {
+                 ### Store bibtexkey
+                 if (is.null(x['bibtexkey']) || is.na(x['bibtexkey']) || (toupper(x['bibtexkey']) == 'NA')) {
+                   bibtexkey <- "nokey"
+                 } else {
+                   bibtexkey <- x['bibtexkey'];
+                   ### Also remove it so we don't store it in the reference
+                   x <- x[names(x) != 'bibtexkey'];
+                 }
+                 
+                 ### Store reference type
+                 if (!is.null(x['recordtype']) ||
+                     !is.na(x['recordtype']) ||
+                     (toupper(x['recordtype']) != 'NA')) {
+                   type <- x['recordtype'];
+                 } else if (!is.null(x['recordType']) ||
+                     !is.na(x['recordType']) ||
+                     (toupper(x['recordType']) != 'NA')) {
+                   type <- x['recordType'];
+                 } else if (!is.null(x['articleType']) ||
+                     !is.na(x['articleType']) ||
+                     (toupper(x['articleType']) != 'NA')) {
+                   type <- x['articleType'];
+                 } else if (!is.null(x['type']) || !is.na(x['type']) || (toupper(x['type']) != 'NA')) {
+                   type <- x['type']
+                 } else {
+                   type <- 'article';
+                 }
+                 ### Remove NA values
+                 x <- x[!is.na(x)];
+                 ### Escape pound signs and curly braces
+                 x <- gsub("(#|\\{|\\})", "\\\\\\1", x);
+                 ### Generate and return result
+                 return(c(paste0("@", type, "{", bibtexkey, ","),
+                          paste0("  ", names(x), " = {", trimws(x), "},"),
+                          "}", ""));
+               });
+  return(unlist(res));
+}
+
+writeLines(dataframeToBibTex(referenceDf),
+           con <- file(file.path(workingPath,
+                                 "included-sources.bibtex"),
+                       "w", 
+                       encoding = "UTF-8"));
+close(con);
+
 ### Do some cleaning
 referenceDf$author <- trimws(referenceDf$author);
 referenceDf$title <- trimws(referenceDf$title);
@@ -591,7 +652,7 @@ referenceDf$secTitle <-
 referenceDf$secTitle <-
   ifelse(is.na(referenceDf$secTitle),
          "",
-         paste0("<i>", referenceDf$secTitle, "</i>"));
+         paste0("<i>", referenceDf$secTitle, ", </i>"));
 
 referenceDf$doiBit <-
   ifelse(is.na(referenceDf$doi),
@@ -602,13 +663,12 @@ referenceDf$secTitlePeriod <-
   ifelse(is.na(referenceDf$secTitle) && is.na(referenceDf$pagesBit),
          "",
          ".");
-         
 
 referenceDf <-
   referenceDf %>%
   dplyr::mutate(reference_html = 
                   glue("<div style='padding-left: 20px; text-indent: -20px ;'>{author} ({year}). {title}. {secTitle}{pagesBit}{secTitlePeriod}{doiBit}</div>"));
 
-cat(referenceDf$reference_html);
+cat(referenceDf$reference_html[order(referenceDf$reference_html)]);
 
 ```
