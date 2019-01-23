@@ -35,3 +35,7 @@ vignettes/*.pdf
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 .Rproj.user
+
+# Word file with manuscript preprint
+snippe-peters-kok--2019--the-operationalization-of-self-identity-in-reasoned-action-models.docx
+
