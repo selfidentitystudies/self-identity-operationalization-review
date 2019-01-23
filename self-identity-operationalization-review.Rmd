@@ -113,12 +113,12 @@ resultsTable <- ldply(queryHits,
                       });
 
 write.csv(resultsTable,
-          file = file.path(workingPath, "list of operationalisations.csv"),
+          file = file.path(workingPath, "list-of-operationalizations.csv"),
           row.names = FALSE);
 
 ###############################################################################
 ###############################################################################
-### Convert to long dataframe (with one row for each operationalisation
+### Convert to long dataframe (with one row for each operationalization
 ###############################################################################
 ###############################################################################
 
@@ -260,7 +260,7 @@ write.csv(longResults[longResults$anyMatch|1, c('category',
                                                 'author',
                                                 'title',
                                                 'year')],
-          file = file.path(workingPath, "operationalisations.csv"));
+          file = file.path(workingPath, "operationalizations-first-categorization.csv"));
 
 ```
 
@@ -360,7 +360,7 @@ write.csv(longResults[longResults$anyMatch|1, c('category_revision1',
                                                 'title',
                                                 'year',
                                                 'category')],
-          file = file.path(workingPath, "operationalisations_revision1.csv"));
+          file = file.path(workingPath, "operationalizations_second_categorization.csv"));
 
 ```
 
@@ -431,7 +431,7 @@ write.csv(longResults[longResults$anyMatch|1, c('category_revision2',
                                                 'title',
                                                 'year',
                                                 'category')],
-          file = file.path(workingPath, "operationalisations_revision2.csv"));
+          file = file.path(workingPath, "operationalizations_third_categorization.csv"));
 
 ```
 
@@ -557,7 +557,7 @@ names(allOperationalisationsCategorised) <-
 knitr::kable(allOperationalisationsCategorised);
 
 write.csv(allOperationalisationsCategorised,
-          file = file.path(workingPath, "operationalisations-categorized.csv"));
+          file = file.path(workingPath, "operationalizations-categorized.csv"));
 
 ```
 
@@ -672,3 +672,4 @@ referenceDf <-
 cat(referenceDf$reference_html[order(referenceDf$reference_html)]);
 
 ```
+

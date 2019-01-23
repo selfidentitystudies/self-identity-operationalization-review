@@ -246,7 +246,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">The Operationalisation of Self-Identity in Reasoned Action Models: A systematic review of self-identity operationalisations in three decades years of research</h1>
 <h4 class="author"><em>Marwin H. M. Snippe, Gjalt-Jorn Y. Peters &amp; Gerjo Kok</em></h4>
-<h4 class="date"><em>10:52:19 on 2019-01-09 CET (GMT+0100)</em></h4>
+<h4 class="date"><em>16:29:27 on 2019-01-23 CET (GMT+0100)</em></h4>
 
 </div>
 
@@ -572,12 +572,12 @@ names(queryHits[[1]]$records) &lt;- trimws(names(queryHits[[1]]$records));</code
                       });
 
 write.csv(resultsTable,
-          file = file.path(workingPath, &quot;list of operationalisations.csv&quot;),
+          file = file.path(workingPath, &quot;list-of-operationalizations.csv&quot;),
           row.names = FALSE);
 
 ###############################################################################
 ###############################################################################
-### Convert to long dataframe (with one row for each operationalisation
+### Convert to long dataframe (with one row for each operationalization
 ###############################################################################
 ###############################################################################
 
@@ -728,7 +728,7 @@ write.csv(longResults[longResults$anyMatch|1, c('category',
                                                 'author',
                                                 'title',
                                                 'year')],
-          file = file.path(workingPath, &quot;operationalisations.csv&quot;));</code></pre>
+          file = file.path(workingPath, &quot;operationalizations-first-categorization.csv&quot;));</code></pre>
 </div>
 </div>
 <div id="discussion-of-operationalisation-categories" class="section level2 tabset">
@@ -3914,7 +3914,7 @@ write.csv(longResults[longResults$anyMatch|1, c('category_revision1',
                                                 'title',
                                                 'year',
                                                 'category')],
-          file = file.path(workingPath, &quot;operationalisations_revision1.csv&quot;));</code></pre>
+          file = file.path(workingPath, &quot;operationalizations_second_categorization.csv&quot;));</code></pre>
 </div>
 </div>
 <div id="discussion-of-first-revision-of-operationalisation-categories" class="section level2 tabset">
@@ -7072,7 +7072,7 @@ write.csv(longResults[longResults$anyMatch|1, c('category_revision2',
                                                 'title',
                                                 'year',
                                                 'category')],
-          file = file.path(workingPath, &quot;operationalisations_revision2.csv&quot;));</code></pre>
+          file = file.path(workingPath, &quot;operationalizations_third_categorization.csv&quot;));</code></pre>
 </div>
 </div>
 <div id="discussion-of-second-revision-of-operationalisation-categories" class="section level2 tabset">
@@ -13439,7 +13439,7 @@ knitr::kable(allOperationalisationsCategorised);</code></pre>
 </tbody>
 </table>
 <pre class="r"><code>write.csv(allOperationalisationsCategorised,
-          file = file.path(workingPath, &quot;operationalisations-categorized.csv&quot;));</code></pre>
+          file = file.path(workingPath, &quot;operationalizations-categorized.csv&quot;));</code></pre>
 </div>
 </div>
 <div id="references" class="section level1">
