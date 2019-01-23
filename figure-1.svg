@@ -15,7 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="figure-1.svg">
+   sodipodi:docname="figure-1.svg"
+   inkscape:export-filename="B:\Data\research\Self-Identity\self-identity-operationalization-review\figure-1.png"
+   inkscape:export-xdpi="307"
+   inkscape:export-ydpi="307">
   <defs
      id="defs4">
     <marker
@@ -316,9 +319,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1214482"
-     inkscape:cx="139.43877"
-     inkscape:cy="244.20407"
+     inkscape:zoom="1.2545249"
+     inkscape:cx="242.11556"
+     inkscape:cy="459.21727"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -349,7 +352,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
